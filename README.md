@@ -30,9 +30,10 @@ Ces entités sont reliées les unes aux autres par **des bus**.
 
 **CPU** : central processing unit
 
-**Rôle** : 
+**Rôle** :
+
 1. Exécuter séquentiellement des instructions (aller cherches les instructions en mémoire puis les exécuter).
-2. Effectuer des opérations élémentaires sur des données (valeurs numériques ou adresses mémoires) 
+2. Effectuer des opérations élémentaires sur des données (valeurs numériques ou adresses mémoires)
 
 #### 3.1.1. Caractéristiques
 
@@ -47,13 +48,14 @@ _Emulateur:_ traduit à la volée des instructions d'une famille a l'autre
 #### 3.1.2. Unités: Divisions du processeur
 
 - **Unité de commande:**
-	- Orchestre les instructions à executer (métronome dans l'archi de Von Neumann).
-	- Formé de plusieurs registres (ex: compteur ordinal, mémorise l'adresse des instructions)
+  - Orchestre les instructions à executer (métronome dans l'archi de Von Neumann).
+  - Formé de plusieurs registres (ex: compteur ordinal, mémorise l'adresse des instructions)
 - **Unité de traitement:**
-	- Réalise le calcul.
+  - Réalise le calcul.
 
-2 types de registres: 
-1. `Etat` (ex: retenue lors de l'addition) 
+2 types de registres:
+
+1. `Etat` (ex: retenue lors de l'addition)
 2. `Generaux` (accumulateur, données)
 
 #### 3.1.3. Horloge: Synchronisation des opérations
@@ -66,8 +68,9 @@ Cadence l'ensemble des périphériques, pour qu'ils soient synchronisés.
 #### 3.1.4. Registe: zones de mémoire
 
 **Définition**:
-+ Petites zones de mémoires internes au CPU, à l'accès rapide
-+ Dont la capacité est très limité, mais peut contenir au choix :
+
+- Petites zones de mémoires internes au CPU, à l'accès rapide
+- Dont la capacité est très limité, mais peut contenir au choix :
   - un entier
   - un flottant
   - une adresse
@@ -81,22 +84,24 @@ Cadence l'ensemble des périphériques, pour qu'ils soient synchronisés.
 #### 3.1.5. Bus
 
 Définition :
-+ Réunion des parties matérielles et immatérielles qui permet la transmission de données entre les composants participants (liaison physique d'un matériel vers un autre).
-+ `x` fils => bus de largeur `x` (ex: 16 bits => 16 fils)
 
-![image-20220509165054058](README.assets/image-20220509165054058.png)
+- Réunion des parties matérielles et immatérielles qui permet la transmission de données entre les composants participants (liaison physique d'un matériel vers un autre).
+- `x` fils => bus de largeur `x` (ex: 16 bits => 16 fils)
 
-Différents types : 
+Différents types :
+
 - 3 principaux :
   - bus d'`adressage` => fournis l'adresse (dans la carte mémoire, réseau etc) (unidirectionnel)
   - bus de `contrôle` => fournis la commande a exécuter (ex: lecture/écriture) (bi-directionnels)
   - bus de `données` => fournis la donner a faire transitionner (valeur) (bi-directionnels)
 
 Des bus plus complexes existent, tels que :
+
 - bus `mémoire`: processeur <-> RAM (mov)
 - bus `I/O`: autres périphériques (bus PCI, AGP, ISA, IDE...)
+  Sur PC, les deux sont confondus, mais pas la même vitesse/largeur de données.
 
-Sur PC, les deux sont confondus, mais pas la même vitesse/largeur de données.
+![image-20220509165054058](README.assets/image-20220509165054058.png)
 
 Les `chipsets` assurent l'interconnexion bus <-> processeur
 
@@ -119,9 +124,9 @@ Deux familles d'instructions:
 
 #### 3.1.7. Interruptions: simple fil reliant un périphérique au processeur
 
-+ Un ligne d'interruption, comme étant un simple fil reliant un périphérique (ex. contrôleur clavier, carte réseau) au processeur. 
-  + Le rôle de ce fil est d’être dans un état (0/1), quasiment toujours identique sauf quand un évenement remarquable se produit (touche clavier, paquet réseau...)
-  + Quand le processeur detecte un changement d'état, il interrompt le programme associé a l'interuption et fait un saut vers une routine (petit programme) pour faire un traitement, avant de retourner dans le flot d'instructions interrompus.
+- Un ligne d'interruption, comme étant un simple fil reliant un périphérique (ex. contrôleur clavier, carte réseau) au processeur.
+  - Le rôle de ce fil est d’être dans un état (0/1), quasiment toujours identique sauf quand un évenement remarquable se produit (touche clavier, paquet réseau...)
+  - Quand le processeur detecte un changement d'état, il interrompt le programme associé a l'interuption et fait un saut vers une routine (petit programme) pour faire un traitement, avant de retourner dans le flot d'instructions interrompus.
 
 => performance, evite de faire du polling (attente active).
 
@@ -198,10 +203,11 @@ Affichage d'images
   - Périphérique d'`entrée`, ex: clavier (valeurs des touches en input)
   - Périphérique de `sortie`, ex: moniteur (ce qui est affiché en output)
   - Périphérique d'`entrée/sortie`, ex: clé usb (data à stocker en entrée, à récupérer en sortie)
-  
+
 ### CRTC
 
 La technologie d'affichage de l'écran cathodique :
+
 - microcontrôleur chargé de manipuler l'écran vidéo
 - communication par le biais de port
 
@@ -237,10 +243,12 @@ Traduction directe d'un language machine (`binaire`) à un language humain (`opc
 ### 4.1. Syntaxe
 
 Deux grandes syntaxes :
+
 - `INTEL` syntaxe : instruction destination, source
 - `AT&T` assembler : instruction source, destination
 
 On appelle les instructions de base à réalisés : des `mnémoniques`, elles peuvent avoir pour but de :
+
 - déplacer des données
 - opérations mathématiques
 - opérations logiques
@@ -249,11 +257,14 @@ On appelle les instructions de base à réalisés : des `mnémoniques`, elles pe
 Pour une ligne de mnémoniques, on parle de `opcode.
 
 Architecture :
+
 - `CISC` (actuelle): les opcodes ont des tailles variables,
+
 ```pseudocode
 MOV adr1 adr2 => MOV (8 bits) + 2 PARAMS (2x16bits)
 HALT => HALT (8bits)
 ```
+
 - `RISC` (ancienne): tous les opcodes on la même taille
   - si un param n'est pas utilisé, il est remplacé par nul
 
@@ -336,13 +347,14 @@ Choix du système a démarrer (dual boot...) + évolué qu'un bios (ex: peut boo
 #### Interuptions
 
 Définition :
-- point de vue : 
-  - informaticiens : Les interruptions sont des évènements qui interrompent le flot d’exécution du processeur 
+
+- point de vue :
+  - informaticiens : Les interruptions sont des évènements qui interrompent le flot d’exécution du processeur
   - éléctroniciens : C'est une ligne d'interruption, comme étant un simple fil reliant un périphérique (ex. contrôleur clavier, carte réseau) au processeur.
 - Le rôle de ce fil est d’être dans un état (0 ou 1) quasiment toujours identique sauf quand quelque chose de remarquable se produit (ex. l’utilisateur vient d’appuyer sur une touche)
 - Lorsque le processeur détecte que la ligne d’interruption change d’état, il interrompt le programme qui est en train d’être exécuté, et fait un saut vers la première instruction d’un petit programme, ou `handler/routine` ( `ISR`), destiné à effectuer un traitement associé à cette interruption.
 
-Code d'interuption: `iret`. 
+Code d'interuption: `iret`.
 
 3 types :
 
@@ -352,17 +364,19 @@ Code d'interuption: `iret`.
 
 #### Contrôleurs d'interruption et les `IRQ`.
 
-`IRQ` (Interrupt ReQuest) : 
-+ ce sont des interruptions provenant du matériel externe au processeur.
-+ Registre `IDTR`(Interrupt Descriptor Table) : 
+`IRQ` (Interrupt ReQuest) :
 
-Evolution : 
-+ Avant : 
-  + 8bits * 1 => 8 interruptions possibles
-+ Maintenant : 
-  + 8 bits * 2 (Maitre et Esclave) = 16 bits => 15 interruptions possibles : 
-  + Cascade au 2ème bits
-  + 2^8 entrées
+- ce sont des interruptions provenant du matériel externe au processeur.
+- Registre `IDTR`(Interrupt Descriptor Table) :
+
+Evolution :
+
+- Avant :
+  - 8bits \* 1 => 8 interruptions possibles
+- Maintenant :
+  - 8 bits \* 2 (Maitre et Esclave) = 16 bits => 15 interruptions possibles :
+  - Cascade au 2ème bits
+  - 2^8 entrées
 
 ![image-20220509171751566](README.assets/image-20220509171751566.png)
 
@@ -377,9 +391,11 @@ Une activité est un thread.
 ### Variables
 
 Définition
-+ Zone de mémoire nommée
+
+- Zone de mémoire nommée
 
 2 types de variables :
+
 1. locales à une fonction
 2. globales
 
@@ -388,14 +404,17 @@ Les variables locales sont mis en place par l'appelé.
 #### Tas (_heap_)
 
 Définition
-- **Espace mémoire** dédié à l'allocation **dynamique** **pendant** l'exécution d'un programme (ex. *pointeurs, malloc, memfree*)
+
+- **Espace mémoire** dédié à l'allocation **dynamique** **pendant** l'exécution d'un programme (ex. _pointeurs, malloc, memfree_)
 
 Il est situé physiquement au début de la barette de RAM.
 
-Objectif : 
+Objectif :
+
 - stocker des données utilisateur
 
 3 fonctions:
+
 - Initialiser du pointeur (`new`)
 - Récupération de la taille pour stocker `n` octets pour un objet (`getmem`(int taille))
 - Ecraser la mémoire pas des zéros (`freemen`(int adresse, int taille))
@@ -405,44 +424,51 @@ Objectif :
 ![image-20220509174615429](README.assets/image-20220509174615429.png)
 
 Définition :
-- **Espace mémoire** (`Last In First Out`) dédié à l'allocation **statique** **au lancement** d'un programme (ex. *variables*) 
+
+- **Espace mémoire** (`Last In First Out`) dédié à l'allocation **statique** **au lancement** d'un programme (ex. _variables_)
 
 Objectif :
+
 - La pile sert à mémoriser le flot d'empilement/éxécution entre les fonctions appelantes et appelées (d'une activité).
-  - si la fonction *f* appelle *g* : *g* sera en haut de la pile.
+  - si la fonction _f_ appelle _g_ : _g_ sera en haut de la pile.
 
 La réservation et la libération sont gérées automatiquement par le compilateur. Cette gestion est basée sur les intructions du langage de programmation utilisé.
+
 - création par allocation (réservation).
 - destruction par désallocation (libération).
 
-Elle possède : 
+Elle possède :
+
 - `paramètres` : toute variables passées à la fonction pour traitement
 - `variables locales` : toutes les variables définies dans la fonction de la frame
-- `adresse de retour` : instruction définie par la fonction appelante 
+- `adresse de retour` : instruction définie par la fonction appelante
 - le pointeur `this`
 
 ![image-20220509174243448](README.assets/image-20220509174243448.png)
 
 Registres :
+
 - Base pointer `EBP`: début de frame
 - Stack pointer `ESP`: fin de frame
 - Frame pointer `EIP`: adresse de retour
 - `EBS`
 
 Sauvegarde du contexte d’éxécution :
-+ Etapes : 
-  + sauvegardes des registres
-  + sauvegarde du pointeur de pile
-+ Illustration : 
-  + Etat de la pile à l’issue des empilements pour la sauvegarde du contexte
-  + ![image-20220509183033781](README.assets/image-20220509183033781.png)
+
+- Etapes :
+  - sauvegardes des registres
+  - sauvegarde du pointeur de pile
+- Illustration :
+  - Etat de la pile à l’issue des empilements pour la sauvegarde du contexte
+  - ![image-20220509183033781](README.assets/image-20220509183033781.png)
 
 #### Frame
 
-Définition : 
+Définition :
 Lot de données qui est poussé ensemble sur la pile.
 
 Contenu :
+
 - `variables locales
 - `adresse de retour`
 - le pointeur `this`
@@ -461,7 +487,7 @@ Configurations avant/après allocation d’une nouvelle region.
 
 ![image-20220509173923928](README.assets/image-20220509173923928.png)
 
-Dans cette configuration, la libération de l’objet en rose à droite va entraîner la libération de slabs en rafale : 
+Dans cette configuration, la libération de l’objet en rose à droite va entraîner la libération de slabs en rafale :
 
 ![image-20220509173846021](README.assets/image-20220509173846021.png)
 
@@ -482,9 +508,10 @@ Un de ses avantages est qu'il n'y a pas besoin d'avoir accès à la machine vict
 5. Pour que le code soit immédiatement executé, on peut écrire son adresse dans le retour
 
 **Causes** :
-+ lectures non-flitrée de donné par utilisateur (`injection`)
-+ code trop complexe (`comportement impossible à prédire`)
-+ manque de délimitation du code (`bounds-checking`)
+
+- lectures non-flitrée de donné par utilisateur (`injection`)
+- code trop complexe (`comportement impossible à prédire`)
+- manque de délimitation du code (`bounds-checking`)
 
 ## 8. Synchronisation
 
@@ -503,41 +530,45 @@ Les trois notions de threads, d’ordonnancement et de synchronisation sont trè
 Ressource pour laquelle il faut réguler l'accès.
 
 2 types de sections :
+
 - Section `critique`: instructions accédant à une ressource critique.
 - Section `atomique`: jamais interrompue, tout le temp executé dans son intégrité (ex: attribution a une variable)
 
-#### `Primitive` de synchronisation (une par ressource géré par l'OS) 
+#### `Primitive` de synchronisation (une par ressource géré par l'OS)
 
-+ Objet particulier de l'OS, à associer aux ressources à gérer. 
-+ Objectif : former une instruction atomique, afin de réguler les accès aux ressources critiques par les threads.
+- Objet particulier de l'OS, à associer aux ressources à gérer.
+- Objectif : former une instruction atomique, afin de réguler les accès aux ressources critiques par les threads.
 
 #### Threads (plusieurs dans le système)
 
-+ Registre du processeur, dont une pile (tas) de données et une zone de code.
-+ Flot d’instructions à exécuter sur un processeur. Un thread peut être (entre autres) en cours d’exécution sur le processeur, bloqué dans une primitive de synchronisation, ou “prêt”.
-+ ll s’agit d’une structure de données manipulée par l’OS qui est constituée principalement de **2 éléments essentiels** : 
-	+ un `contexte d’exécution` 
-	+ un `état`.
+- Registre du processeur, dont une pile (tas) de données et une zone de code.
+- Flot d’instructions à exécuter sur un processeur. Un thread peut être (entre autres) en cours d’exécution sur le processeur, bloqué dans une primitive de synchronisation, ou “prêt”.
+- ll s’agit d’une structure de données manipulée par l’OS qui est constituée principalement de **2 éléments essentiels** :
+  - un `contexte d’exécution`
+  - un `état`.
 
 2 types de threads :
+
 1. noyau
 2. utilisateur
 
-Cycle de vie d'un thread : 
+Cycle de vie d'un thread :
 ![image-20220509182501052](README.assets/image-20220509182501052.png)
 
 #### Ordonnanceur (un seul dans tout le sytème)
 
-+ Sous- partie de l’OS s’occupant de la gestion de la ressource “processeur”. Gère la “file des (threads) prêts”, c’est-à-dire la liste des threads non bloqués mais en attente du processeur ("dispatcher" les threads "prêts" sur le processeur). 
+- Sous- partie de l’OS s’occupant de la gestion de la ressource “processeur”. Gère la “file des (threads) prêts”, c’est-à-dire la liste des threads non bloqués mais en attente du processeur ("dispatcher" les threads "prêts" sur le processeur).
 
 ##### Ordonnancement
 
 **2 types d'ordonnancement** :
+
 1. `Coopératif` : les threads se rendent la main mutuellement à la fin de leurs activités
 2. `Préemptif` : une partie tierce s'occupe de donner la main aux threads selon une certaine politique : périodiquement avec un timer, sur interruption, etc
 3. `Coopératif direct`
 
 **algorithmes d’ordonnancement** :
+
 1. Premier arrivé, premier servi (First Come, First Serve `FCFS`)
 2. Ordonnancement par ordre croissant de temps d’exécution (Shortest Job First `SJF`)
 3. Tourniquet (`Round-Robin`) : les activités avancent à la même vitesse.
@@ -549,14 +580,14 @@ L'ordonnancement (dans le temps) se différencie de l'allocation (dans l'espace)
 
 #### Verrou
 
-+ Empecher les autres threads d'accéder a la ressource
-+ Deux opérations: `lock` / `unlock`
+- Empecher les autres threads d'accéder a la ressource
+- Deux opérations: `lock` / `unlock`
 
 #### Sémaphores
 
-+ Pouvoir controller finement le nb de process qui peuven taccéder.
-+ Sac de clés pour accéder a la ressource, mais nombre de clé limité
-+ Trois opérations: `init` / `down` / `up`
+- Pouvoir controller finement le nb de process qui peuven taccéder.
+- Sac de clés pour accéder a la ressource, mais nombre de clé limité
+- Trois opérations: `init` / `down` / `up`
 
 #### Mutex (mutual exclusion)
 
@@ -593,9 +624,9 @@ Plusieurs lecteurs, un écrivain. Perpetuellement des lecteurs mais l'écrivain 
 L'écriveur est donc bloqué.
 
 Causes :
-+ `shortest job first`
-+ `FCFS` avec priorités
 
+- `shortest job first`
+- `FCFS` avec priorités
 
 ## 8. Mémoire
 
