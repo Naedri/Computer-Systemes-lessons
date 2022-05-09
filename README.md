@@ -371,35 +371,49 @@ Priorité: 0 > 1 > 8 - 15 > 3 - 7
 ## Activité
 
 Ensemble de code et de données s'éxécutant sur le processeur.
+L'ensemble des activités d'un programme partagent le code et le tas.
+Une activité est un thread.
 
-### Fonctions
+### Variables
 
-+ `getmem`(int taille) : pour stocker un objet
-+ `freemen`(int adresse, int taille) : vider la mémoire d'une zonne donnée
+Définition
++ Zone de mémoire nommée
+
+2 types de variables :
+1. locales à une fonction
+2. globales
+
+Les variables locales sont mis en place par l'appelé.
 
 #### Tas (_heap_)
 
 Définition
+- **Espace mémoire** dédié à l'allocation **dynamique** **pendant** l'exécution d'un programme (ex. *pointeurs, malloc, memfree*)
 
-- espace mémoire dédié à l'allocation dynamique pendant l'exécution d'un programme : pointeurs, malloc, memfree
-- Situé physiquement au début de la barette de RAM
-- Permet de stoquer les données utilisateur
+Il est situé physiquement au début de la barette de RAM.
+
+Objectif : 
+- stocker des données utilisateur
 
 3 fonctions:
-
-- Initialiser du pointeur (new)
-- Récupération de la taille pour stoquer n octets (getmem)
-- Ecraser la mémoire pas des zéros (greemem)
+- Initialiser du pointeur (`new`)
+- Récupération de la taille pour stocker `n` octets pour un objet (`getmem`(int taille))
+- Ecraser la mémoire pas des zéros (`freemen`(int adresse, int taille))
 
 #### Pile (_stack_)
 
 ![image-20220509174615429](README.assets/image-20220509174615429.png)
 
 Définition :
-- Espace mémoire dédié à l'allocation statique au lancement d'un programme : variables etc
-- Flot d'execution (fonction qui appelle une autre fonction etc)
-- Gestion des variables locales => _Last In First Out_
-- Allocation et désallocation de mémoire automatique => Reservation et libération faite par le compilateur
+- **Espace mémoire** (`Last In First Out`) dédié à l'allocation **statique** **au lancement** d'un programme (ex. *variables*) 
+
+Objectif :
+- La pile sert à mémoriser le flot d'empilement/éxécution entre les fonctions appelantes et appelées (d'une activité).
+  - si la fonction *f* appelle *g* : *g* sera en haut de la pile.
+
+La réservation et la libération sont gérées automatiquement par le compilateur. Cette gestion est basée sur les intructions du langage de programmation utilisé.
+- création par allocation (réservation).
+- destruction par désallocation (libération).
 
 Elle possède : 
 - `paramètres` : toute variables passées à la fonction pour traitement
@@ -415,7 +429,7 @@ Registres :
 - Frame pointer `EIP`: adresse de retour
 - `EBS`
 
-Sauvegarde du contexte d’execution :
+Sauvegarde du contexte d’éxécution :
 + Etapes : 
   + sauvegardes des registres
   + sauvegarde du pointeur de pile
@@ -433,9 +447,13 @@ Contenu :
 - `adresse de retour`
 - le pointeur `this`
 
-Registres : `EBP`, `ESP`, `EIP`
+Registres : `EBP`, `ESP`, `EIP`.
 
-#### Allocation, utilisation et liberation
+#### Débordement de pile
+
+La pile doit être de taille limitée mais suffisamment grande pour contenir une profondeur raisonnable d’imbrication d’appels de fonction. Si on la dimensionne mal, les frames risquent d’en sortir (on parle d’un “débordement de pile”), ce qui peut se traduire par des écrasements de donnees
+
+#### Allocation, utilisation et libération
 
 ![image-20220509174005105](README.assets/image-20220509174005105.png)
 
@@ -451,7 +469,7 @@ Dans cette configuration, la libération de l’objet en rose à droite va entra
 
 C'est l'exploitation d'une faille de mémoire, durant laquelle l'écriture en mémoire du buffer de la pile d’exécution dépasse son espace mémoire alloué. Le processus subit alors une modification des informations nécessaires au fonctionnement du programme. (source).
 
-L'idée serait de rediriger l'adresse de l'EIP (adresse de l'instruction courante) vers une partie du programme que l'on souhaiterai exécuter (en général, programme injecté dans la pile d'exécution).
+L'idée serait de rediriger l'adresse de l'EIP (adresse de l'instruction courante) vers une partie du programme que l'on souhaiterai exécuter (en général, programme injecté dans la pile d'exécution). Pour cela on peut modifier l'adresse du pointeur de retour d'une instruction.
 
 Un de ses avantages est qu'il n'y a pas besoin d'avoir accès à la machine victime.
 
@@ -460,8 +478,13 @@ Un de ses avantages est qu'il n'y a pas besoin d'avoir accès à la machine vict
 1. Allocation d'une taille BUFSIZE a une variable
 2. Entrée de données d'une taille supérieure a BUFSIZE dans la var
 3. Dépassement sur les variables successives
-4. Lors de l'appel des variables successives, c'est le code malicieux qui sera appelé
+4. Lors de l'appel des variables successives, c'est le code malicieux qui sera appelé (et la suite de la pile est ignorée)
 5. Pour que le code soit immédiatement executé, on peut écrire son adresse dans le retour
+
+**Causes** :
++ lectures non-flitrée de donné par utilisateur (`injection`)
++ code trop complexe (`comportement impossible à prédire`)
++ manque de délimitation du code (`bounds-checking`)
 
 ## 8. Synchronisation
 
@@ -509,9 +532,16 @@ Cycle de vie d'un thread :
 
 ##### Ordonnancement
 
-2 types :
+**2 types d'ordonnancement** :
 1. `Coopératif` : les threads se rendent la main mutuellement à la fin de leurs activités
 2. `Préemptif` : une partie tierce s'occupe de donner la main aux threads selon une certaine politique : périodiquement avec un timer, sur interruption, etc
+3. `Coopératif direct`
+
+**algorithmes d’ordonnancement** :
+1. Premier arrivé, premier servi (First Come, First Serve `FCFS`)
+2. Ordonnancement par ordre croissant de temps d’exécution (Shortest Job First `SJF`)
+3. Tourniquet (`Round-Robin`) : les activités avancent à la même vitesse.
+4. Priorité (`Priority`)
 
 L'ordonnancement (dans le temps) se différencie de l'allocation (dans l'espace).
 
@@ -557,11 +587,15 @@ Deux threads qui veulent partager deux ressources simultanément
 Chaque thread a une ressource mais a besoin de l'autre pour continuer.
 => Les deux sont donc en attente de l'autre.
 
-#### Famine
+#### Famine (_starvation_)
 
 Plusieurs lecteurs, un écrivain. Perpetuellement des lecteurs mais l'écrivain ne peut écrire que si personne ne lis.
-
 L'écriveur est donc bloqué.
+
+Causes :
++ `shortest job first`
++ `FCFS` avec priorités
+
 
 ## 8. Mémoire
 
