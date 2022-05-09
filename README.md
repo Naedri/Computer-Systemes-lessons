@@ -232,7 +232,7 @@ La technologie d'affichage de l'écran cathodique :
 
 ## 5. L'Assembleur
 
-Traduction directe d'un language machine (binaire) a un language humain (opcodes)
+Traduction directe d'un language machine (`binaire`) à un language humain (`opcodes`).
 
 ### 4.1. Syntaxe
 
@@ -240,13 +240,13 @@ Deux grandes syntaxes :
 - `INTEL` syntaxe : instruction destination, source
 - `AT&T` assembler : instruction source, destination
 
-Les instructions de base (`mnémoniques`) sont :
+On appelle les instructions de base à réalisés : des `mnémoniques`, elles peuvent avoir pour but de :
 - déplacer des données
 - opérations mathématiques
-- - opérations logiques
+- opérations logiques
 - modifier le séquencement d'un programme (sauts, branchement)
 
-Une ligne de mnémoniques => `opcode`
+Pour une ligne de mnémoniques, on parle de `opcode.
 
 Architecture :
 - `CISC` (actuelle): les opcodes ont des tailles variables,
@@ -370,27 +370,12 @@ Priorité: 0 > 1 > 8 - 15 > 3 - 7
 
 ## Activité
 
-Esemble de code et de données s'éxécutant sur le processeur
+Ensemble de code et de données s'éxécutant sur le processeur.
 
 ### Fonctions
 
 + `getmem`(int taille) : pour stocker un objet
 + `freemen`(int adresse, int taille) : vider la mémoire d'une zonne donnée
-
-### Concurence
-
-Activité / Thread: registre du processeur, dont une pile (tas) de données et une zone de code.
-
-`Thread` : 
-
-### Ordonnancement
-
-Définition :
-
-2 types :
-
-1. `Coopératif` : les threads se rendent la main mutuellement à la fin de leurs activités
-2. `Préemptif` : une partie tierce s'occupe de donner la main aux threads selon une certaine politique : périodiquement avec un timer, sur interruption, etc
 
 #### Tas (_heap_)
 
@@ -411,30 +396,44 @@ Définition
 ![image-20220509174615429](README.assets/image-20220509174615429.png)
 
 Définition :
-
 - Espace mémoire dédié à l'allocation statique au lancement d'un programme : variables etc
 - Flot d'execution (fonction qui appelle une autre fonction etc)
 - Gestion des variables locales => _Last In First Out_
 - Allocation et désallocation de mémoire automatique => Reservation et libération faite par le compilateur
 
-#### Frame
-
-Lot de données qui est poussé ensemble sur la pile.
-
-La frame et son contenue : 
+Elle possède : 
 - `paramètres` : toute variables passées à la fonction pour traitement
 - `variables locales` : toutes les variables définies dans la fonction de la frame
 - `adresse de retour` : instruction définie par la fonction appelante 
 - le pointeur `this`
+
 ![image-20220509174243448](README.assets/image-20220509174243448.png)
 
-Stockage de la frame de données dans la pile :
-
+Registres :
 - Base pointer `EBP`: début de frame
 - Stack pointer `ESP`: fin de frame
 - Frame pointer `EIP`: adresse de retour
+- `EBS`
 
+Sauvegarde du contexte d’execution :
++ Etapes : 
+  + sauvegardes des registres
+  + sauvegarde du pointeur de pile
++ Illustration : 
+  + Etat de la pile à l’issue des empilements pour la sauvegarde du contexte
+  + ![image-20220509183033781](README.assets/image-20220509183033781.png)
 
+#### Frame
+
+Définition : 
+Lot de données qui est poussé ensemble sur la pile.
+
+Contenu :
+- `variables locales
+- `adresse de retour`
+- le pointeur `this`
+
+Registres : `EBP`, `ESP`, `EIP`
 
 #### Allocation, utilisation et liberation
 
@@ -444,7 +443,7 @@ Configurations avant/après allocation d’une nouvelle region.
 
 ![image-20220509173923928](README.assets/image-20220509173923928.png)
 
-Dans cette configuration, la liberation de l’objet en rose à droite va entraîner la liberation de slabs en rafale : 
+Dans cette configuration, la libération de l’objet en rose à droite va entraîner la libération de slabs en rafale : 
 
 ![image-20220509173846021](README.assets/image-20220509173846021.png)
 
@@ -466,44 +465,78 @@ Un de ses avantages est qu'il n'y a pas besoin d'avoir accès à la machine vict
 
 ## 8. Synchronisation
 
+### Notions
+
 Système multitache : threads interrompus (eux mêmes, ou ordonnanceur)
 
 Problème: programme imprévisibles (accès a une même ressource dans les deux threads, mais pas de possibilité de connaitre l'ordre)
 
-Ressource critique: donnée limitée en accès.
+Les trois notions de threads, d’ordonnancement et de synchronisation sont très liées :
 
-2 types de Sections :
+![image-20220509180135770](README.assets/image-20220509180135770.png)
 
-- Section `critique`: instructions accédans a une ressource critique.
-- Section `atomique`: jamais interrompu, tout le temp executé dans son intégrité (ex: attribution a une var)
+#### Ressource critique
 
-`Primitive`: instruction atomique, permet synchronisation (ex: Promise.all)
+Ressource pour laquelle il faut réguler l'accès.
 
-### Threads
+2 types de sections :
+- Section `critique`: instructions accédant à une ressource critique.
+- Section `atomique`: jamais interrompue, tout le temp executé dans son intégrité (ex: attribution a une variable)
 
-### Verrou
+#### `Primitive` de synchronisation (une par ressource géré par l'OS) 
 
-Empecher les autres threads d'accéder a la ressource
++ Objet particulier de l'OS, à associer aux ressources à gérer. 
++ Objectif : former une instruction atomique, afin de réguler les accès aux ressources critiques par les threads.
 
-Deux opérations: lock / unlock
+#### Threads (plusieurs dans le système)
 
-### Sémaphores
++ Registre du processeur, dont une pile (tas) de données et une zone de code.
++ Flot d’instructions à exécuter sur un processeur. Un thread peut être (entre autres) en cours d’exécution sur le processeur, bloqué dans une primitive de synchronisation, ou “prêt”.
++ ll s’agit d’une structure de données manipulée par l’OS qui est constituée principalement de **2 éléments essentiels** : 
+	+ un `contexte d’exécution` 
+	+ un `état`.
 
-Pouvoir controller finement le nb de process qui peuven taccéder.
+2 types de threads :
+1. noyau
+2. utilisateur
 
-Sac de clés pour accéder a la ressource, mais nombre de clé limité
+Cycle de vie d'un thread : 
+![image-20220509182501052](README.assets/image-20220509182501052.png)
 
-Trois opérations: init / down / up
+#### Ordonnanceur (un seul dans tout le sytème)
 
-### Mutex (mutual exclusion)
++ Sous- partie de l’OS s’occupant de la gestion de la ressource “processeur”. Gère la “file des (threads) prêts”, c’est-à-dire la liste des threads non bloqués mais en attente du processeur ("dispatcher" les threads "prêts" sur le processeur). 
+
+##### Ordonnancement
+
+2 types :
+1. `Coopératif` : les threads se rendent la main mutuellement à la fin de leurs activités
+2. `Préemptif` : une partie tierce s'occupe de donner la main aux threads selon une certaine politique : périodiquement avec un timer, sur interruption, etc
+
+L'ordonnancement (dans le temps) se différencie de l'allocation (dans l'espace).
+
+### Mécanismes
+
+#### Verrou
+
++ Empecher les autres threads d'accéder a la ressource
++ Deux opérations: `lock` / `unlock`
+
+#### Sémaphores
+
++ Pouvoir controller finement le nb de process qui peuven taccéder.
++ Sac de clés pour accéder a la ressource, mais nombre de clé limité
++ Trois opérations: `init` / `down` / `up`
+
+#### Mutex (mutual exclusion)
 
 - 1 seul jeton, sémaphore binaire.
 - Mutex, pour exclusion mutuelle, sert à empêcher deux processus d'accéder à une même ressource critique en même temps.
-- En java on peut utiliser l'instruction "synchronized".
+- En java on peut utiliser l'instruction `synchronized`.
 
-### Verrou de rotation
+#### Verrou de rotation
 
-protéger une ressource partagée en mode multiprocesseur.
+Protéger une ressource partagée en mode multiprocesseur.
 
 Lock une ressource, les autres demandes sont en attente de la fin du premier traitement.
 => attente active, appels succéssifs jusqu'a réponse positive (cycles cpu gachés)
@@ -513,16 +546,18 @@ Suppose que les zones critiques ont une durrée d'execution courte (ex: ecriture
 
 Utilisé avec parcimonie, que dans les kernels.
 
-xchf => atomique, permet de swap des variables (etat précédent avec courant)
+`xchf` => atomique, permet de swap des variables (etat précédent avec courant)
 
-### Deadlocks
+### Problèmes
+
+#### Deadlocks
 
 Deux threads qui veulent partager deux ressources simultanément
 
 Chaque thread a une ressource mais a besoin de l'autre pour continuer.
 => Les deux sont donc en attente de l'autre.
 
-### Famine
+#### Famine
 
 Plusieurs lecteurs, un écrivain. Perpetuellement des lecteurs mais l'écrivain ne peut écrire que si personne ne lis.
 
