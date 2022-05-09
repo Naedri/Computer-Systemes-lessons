@@ -28,6 +28,12 @@ Ces entités sont reliées les unes aux autres par **des bus**.
 
 ### 3.1. Processeur
 
+**CPU** : central processing unit
+
+**Rôle** : 
+1. Exécuter séquentiellement des instructions (aller cherches les instructions en mémoire puis les exécuter).
+2. Effectuer des opérations élémentaires sur des données (valeurs numériques ou adresses mémoires) 
+
 #### 3.1.1. Caractéristiques
 
 - fréquence de fonctionnement (GHz, MHz)
@@ -41,16 +47,14 @@ _Emulateur:_ traduit à la volée des instructions d'une famille a l'autre
 #### 3.1.2. Unités: Divisions du processeur
 
 - **Unité de commande:**
-
-  Orchestre les instructions à executer (métronome dans l'archi de Von Neumann).
-
-  Formé de plusieurs registres (ex: compteur ordinal, mémorise l'adresse des instructions)
-
+	- Orchestre les instructions à executer (métronome dans l'archi de Von Neumann).
+	- Formé de plusieurs registres (ex: compteur ordinal, mémorise l'adresse des instructions)
 - **Unité de traitement:**
+	- Réalise le calcul.
 
-  Réalise le calcul.
-
-  Deux types de registres: Etat (ex: retenue lors de l'addition) / Generaux (accumulateur, données)
+2 types de registres: 
+1. `Etat` (ex: retenue lors de l'addition) 
+2. `Generaux` (accumulateur, données)
 
 #### 3.1.3. Horloge: Synchronisation des opérations
 
@@ -61,11 +65,12 @@ Cadence l'ensemble des périphériques, pour qu'ils soient synchronisés.
 
 #### 3.1.4. Registe: zones de mémoire
 
-Peut contenir:
-
-- un entier
-- un flottant
-- une adresse
+**Définition**:
++ Petites zones de mémoires internes au CPU, à l'accès rapide
++ Dont la capacité est très limité, mais peut contenir au choix :
+  - un entier
+  - un flottant
+  - une adresse
 
 **Références:**
 
@@ -75,22 +80,25 @@ Peut contenir:
 
 #### 3.1.5. Bus
 
-Liaison physique d'un matériel vers un autre.
+Définition :
++ Réunion des parties matérielles et immatérielles qui permet la transmission de données entre les composants participants (liaison physique d'un matériel vers un autre).
++ `x` fils => bus de largeur `x` (ex: 16 bits => 16 fils)
 
-`x` fils => bus de largeur `x` (ex: 16 bits => 16 fils)
+![image-20220509165054058](README.assets/image-20220509165054058.png)
 
-- bus d'`adressage` => fournis l'adresse (dans la carte mémoire, réseau etc)
-- bus de `contrôle` => fournis la commande a executer (ex: lecture/ecriture)
-- bus de `données` => fournis la donner a faire transitionner (valeur)
+Différents types : 
+- 3 principaux :
+  - bus d'`adressage` => fournis l'adresse (dans la carte mémoire, réseau etc) (unidirectionnel)
+  - bus de `contrôle` => fournis la commande a exécuter (ex: lecture/écriture) (bi-directionnels)
+  - bus de `données` => fournis la donner a faire transitionner (valeur) (bi-directionnels)
 
-  > Bus de controle et données: bi-directionnels, attendent une réponse
+Des bus plus complexes existent, tels que :
+- bus `mémoire`: processeur <-> RAM (mov)
+- bus `I/O`: autres périphériques (bus PCI, AGP, ISA, IDE...)
 
-Bus `mémoire`: processeur <-> RAM (mov)
-Bus `I/O`: autres périphériques (bus PCI, AGP, ISA, IDE...)
+Sur PC, les deux sont confondus, mais pas la même vitesse/largeur de données.
 
-Sur PC, les deux sont confondus, mais pas la mê vitesse/largeur de données.
-
-=> `chipsets:` assurent l'interconnexion bus <-> processeur
+Les `chipsets` assurent l'interconnexion bus <-> processeur
 
 Donc sur PC, quand on accède a une adresse par le "bus mémoire", on tombe sur:
 
@@ -98,7 +106,7 @@ Donc sur PC, quand on accède a une adresse par le "bus mémoire", on tombe sur:
 - un périphérique matériel (récent) => projeté, mappé en mémoire physique
 - rien du tout
 
-Un bus travers la carte mère, et est partagé entre les différents périphériques (_ex:_ RAM <-> NET <-> CPU)
+Un bus traverse la carte mère, et est partagé entre les différents périphériques (_ex:_ RAM <-> NET <-> CPU)
 
 #### 3.1.6. Ports I/O: bus sur PC ou chaque adresse est un port (16bits)
 
@@ -111,14 +119,13 @@ Deux familles d'instructions:
 
 #### 3.1.7. Interruptions: simple fil reliant un périphérique au processeur
 
-Etat (0/1), quasiment toujours identique sauf quand un évenement remarquable se produit (touche clavier, paquet réseau...)
-
-Quand le processeur detecte un changement d'état, il interrompt le programme associé a l'interuption et fait un saut vers une routine (petit programme) pour faire un traitement, avant de retourner dans le flot d'instructions interrompus.
++ Un ligne d'interruption, comme étant un simple fil reliant un périphérique (ex. contrôleur clavier, carte réseau) au processeur. 
+  + Le rôle de ce fil est d’être dans un état (0/1), quasiment toujours identique sauf quand un évenement remarquable se produit (touche clavier, paquet réseau...)
+  + Quand le processeur detecte un changement d'état, il interrompt le programme associé a l'interuption et fait un saut vers une routine (petit programme) pour faire un traitement, avant de retourner dans le flot d'instructions interrompus.
 
 => performance, evite de faire du polling (attente active).
 
-- PC originel: 16 lignes d'interruptions sur 2 contolleurs (PIC, Programmable Interrupt
-  Controller) en cascade (donc 15 utilisables).
+- PC originel: 16 lignes d'interruptions sur 2 contrôleurs (PIC, Programmable Interrupt Controller) en cascade (donc 15 utilisables).
 - PC modernes: le processeur joue le role des controlleurs (256 lignes)
 
 ### 3.2. Mémoire
@@ -186,10 +193,17 @@ Affichage d'images
 ## 4. Périphériques
 
 - Un périphérique informatique est un terme générique donné aux composants de matériel informatique assurant les communications entre l'unité centrale de l'ordinateur et le monde extérieur.
+
 - 3 types :
   - Périphérique d'`entrée`, ex: clavier (valeurs des touches en input)
   - Périphérique de `sortie`, ex: moniteur (ce qui est affiché en output)
   - Périphérique d'`entrée/sortie`, ex: clé usb (data à stocker en entrée, à récupérer en sortie)
+  
+### CRTC
+
+La technologie d'affichage de l'écran cathodique :
+- microcontrôleur chargé de manipuler l'écran vidéo
+- communication par le biais de port
 
 ### Firmware
 
@@ -222,25 +236,26 @@ Traduction directe d'un language machine (binaire) a un language humain (opcodes
 
 ### 4.1. Syntaxe
 
-- INTEL : instruction destination, source
-- AT&T : instruction source, destination
+Deux grandes syntaxes :
+- `INTEL` syntaxe : instruction destination, source
+- `AT&T` assembler : instruction source, destination
 
-Les instructions de base: mnémoniques
+Les instructions de base (`mnémoniques`) sont :
+- déplacer des données
+- opérations mathématiques
+- - opérations logiques
+- modifier le séquencement d'un programme (sauts, branchement)
 
-Une ligne de mnémoniques => opcode
+Une ligne de mnémoniques => `opcode`
 
-architecture
-
+Architecture :
 - `CISC` (actuelle): les opcodes ont des tailles variables,
-  _ex:_
-
 ```pseudocode
 MOV adr1 adr2 => MOV (8 bits) + 2 PARAMS (2x16bits)
 HALT => HALT (8bits)
 ```
-
 - `RISC` (ancienne): tous les opcodes on la même taille
-  si un param n'est pas utilisé, il est remplacé par nul
+  - si un param n'est pas utilisé, il est remplacé par nul
 
 ### 4.2. Opérandes
 
@@ -276,6 +291,8 @@ HALT => HALT (8bits)
 - `CALL`: appel de procédure
 
 ## 6. Compilation
+
+![Compilation](README.assets/compilation.png)
 
 1. `Fichiers code (.c)`
 
@@ -319,29 +336,52 @@ Choix du système a démarrer (dual boot...) + évolué qu'un bios (ex: peut boo
 #### Interuptions
 
 Définition :
-
-- Un ligne d'interruption, comme étant un simple fil reliant un périphérique (ex. contrôleur clavier, carte réseau) au processeur.
+- point de vue : 
+  - informaticiens : Les interruptions sont des évènements qui interrompent le flot d’exécution du processeur 
+  - éléctroniciens : C'est une ligne d'interruption, comme étant un simple fil reliant un périphérique (ex. contrôleur clavier, carte réseau) au processeur.
 - Le rôle de ce fil est d’être dans un état (0 ou 1) quasiment toujours identique sauf quand quelque chose de remarquable se produit (ex. l’utilisateur vient d’appuyer sur une touche)
-- Lorsque le processeur détecte que la ligne d’interruption change d’état, il interrompt le programme qui est en train d’être exécuté, et fait un saut vers la première instruction d’un petit programme, ou routine, destiné à effectuer un traitement associé à cette interruption.
+- Lorsque le processeur détecte que la ligne d’interruption change d’état, il interrompt le programme qui est en train d’être exécuté, et fait un saut vers la première instruction d’un petit programme, ou `handler/routine` ( `ISR`), destiné à effectuer un traitement associé à cette interruption.
+
+Code d'interuption: `iret`. 
 
 3 types :
 
-- `processeur / exception`: evenement critique (ex: division par 0)
-- `logicielle`: instruction INT ou INT8 (ex: breakpoint dans le code)
-- `materielle`: courant electrique envoyé au CPU (ex: appui a une touche du clavier)
+- `processeur / exception`: evenement critique (ex: division par 0) (**synchrone**)
+- `logicielle`: instruction INT ou INT8 (ex: breakpoint dans le code) (**appel systèmes**)
+- `materielle`: courant electrique envoyé au CPU (ex: appui a une touche du clavier) (**asynchrone**)
 
-code d'interuption: Handler (ou Routine)
+#### Contrôleurs d'interruption et les `IRQ`.
 
-Contrôleurs d'interruption et les IRQ
-Bus 16 bits, 15 interuptions possible. Cascade au numéro 2
+`IRQ` (Interrupt ReQuest) : 
++ ce sont des interruptions provenant du matériel externe au processeur.
++ Registre `IDTR`(Interrupt Descriptor Table) : 
+
+Evolution : 
++ Avant : 
+  + 8bits * 1 => 8 interruptions possibles
++ Maintenant : 
+  + 8 bits * 2 (Maitre et Esclave) = 16 bits => 15 interruptions possibles : 
+  + Cascade au 2ème bits
+  + 2^8 entrées
+
+![image-20220509171751566](README.assets/image-20220509171751566.png)
 
 Priorité: 0 > 1 > 8 - 15 > 3 - 7
 
-Entrée IDT: origine
+## Activité
+
+Esemble de code et de données s'éxécutant sur le processeur
+
+### Fonctions
+
++ `getmem`(int taille) : pour stocker un objet
++ `freemen`(int adresse, int taille) : vider la mémoire d'une zonne donnée
 
 ### Concurence
 
-Activité / Thread: registre du processeur, dont une pile (tas) de données et une zone de code
+Activité / Thread: registre du processeur, dont une pile (tas) de données et une zone de code.
+
+`Thread` : 
 
 ### Ordonnancement
 
@@ -368,6 +408,8 @@ Définition
 
 #### Pile (_stack_)
 
+![image-20220509174615429](README.assets/image-20220509174615429.png)
+
 Définition :
 
 - Espace mémoire dédié à l'allocation statique au lancement d'un programme : variables etc
@@ -377,11 +419,34 @@ Définition :
 
 #### Frame
 
-Stoquage de la frame de données dans la pile
+Lot de données qui est poussé ensemble sur la pile.
 
-- Base pointer EBP: début de frame
-- Stack pointer ESP: fin de frame
-- Frame pointer EIP: adresse de retour
+La frame et son contenue : 
+- `paramètres` : toute variables passées à la fonction pour traitement
+- `variables locales` : toutes les variables définies dans la fonction de la frame
+- `adresse de retour` : instruction définie par la fonction appelante 
+- le pointeur `this`
+![image-20220509174243448](README.assets/image-20220509174243448.png)
+
+Stockage de la frame de données dans la pile :
+
+- Base pointer `EBP`: début de frame
+- Stack pointer `ESP`: fin de frame
+- Frame pointer `EIP`: adresse de retour
+
+
+
+#### Allocation, utilisation et liberation
+
+![image-20220509174005105](README.assets/image-20220509174005105.png)
+
+Configurations avant/après allocation d’une nouvelle region.
+
+![image-20220509173923928](README.assets/image-20220509173923928.png)
+
+Dans cette configuration, la liberation de l’objet en rose à droite va entraîner la liberation de slabs en rafale : 
+
+![image-20220509173846021](README.assets/image-20220509173846021.png)
 
 #### Attaque par Buffer Overflow
 
